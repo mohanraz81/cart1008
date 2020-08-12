@@ -1,0 +1,62 @@
+---
+- name: upload vars
+  include_vars:
+    file: myvars.yaml
+- name: note that encrypted volumes are only supported in >= Ansible 2.4
+  ec2_lc:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    region: "{{ awsregion }}"
+    name: "webapp-{{ versionid }}"
+    image_id: "{{ webappimageid }}"
+    key_name: "{{ keypairname }}"
+    security_groups:
+      - "{{ sgname }}"
+    instance_type: t2.micro
+- name: Create a Security group for EC2
+  ec2_group:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    region: "{{ awsregion }}"
+    name: "{{ lbsgname }}"
+    description: web server security Group
+    vpc_id: "{{ vpcid }}"
+    region: "{{ awsregion }}"
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+- ec2_elb_lb:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    region: "{{ awsregion }}"
+    name: "webapplb"
+    state: present
+    zones:
+      - us-east-1a
+      - us-east-1b
+    security_group_names:
+      - "{{ lbsgname }}"
+    listeners:
+      - protocol: http # options are http, https, ssl, tcp
+        load_balancer_port: 80
+        instance_port: 8080
+        proxy_protocol: True
+
+- ec2_asg:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    region: "{{ awsregion }}"
+    name: webapp
+    load_balancers:
+      - webapplb
+    launch_config_name: "webapp-{{ versionid }}"
+    min_size: 2
+    max_size: 10
+    desired_capacity: 2
+    vpc_zone_identifier: 
+      - "{{ subnetid1 }}"
+      - "{{ subnetid2 }}"
+    tags:
+      - environment: production

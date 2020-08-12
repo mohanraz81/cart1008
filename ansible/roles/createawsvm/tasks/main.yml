@@ -1,0 +1,61 @@
+---
+- name: adding variables
+  include_vars:
+    file: myvars.yaml
+- name: Create a AWS Keypair
+  ec2_key:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    region: "{{ awsregion }}"
+    name: "{{ keypairname }}"
+    key_material: "{{ lookup('file', '/home/ec2-user/.ssh/id_rsa.pub') }}"
+- name: Create a Security group for EC2
+  ec2_group:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    name: "{{ sgname }}"
+    description: web server security Group
+    vpc_id: "{{ vpcid }}"
+    region: "{{ awsregion }}"
+    rules:
+      - proto: tcp
+        from_port: 8080
+        to_port: 8080
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+- name: Create a ec2 instance
+  ec2_instance:
+    aws_access_key: "{{ awsaccesskey }}"
+    aws_secret_key: "{{ awssecretkey }}"
+    region: "{{ awsregion }}"
+    name: "webserver"
+    key_name: "{{ keypairname }}"
+    vpc_subnet_id: "{{ subnetid }}"
+    instance_type: t2.micro
+    security_group: "{{ sgname }}"
+    network:
+      assign_public_ip: true
+    image_id: ami-02354e95b39ca8dec
+    tags:
+      Name: webserver
+  register: webinstanceout
+- debug:
+    var: webinstanceout
+- name: Add host to group webservers
+  add_host:
+    name: "{{ webinstanceout.instances[0].public_dns_name }}"
+    groups: webservers
+    ansible_connection: ssh
+    ansible_user: ec2-user
+    ansible_ssh_private_key_file: /home/ec2-user/.ssh/id_rsa
+    ansible_become: yes
+    ansible_become_method: sudo
+- name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+  wait_for:
+    port: 22
+    host: "{{ webinstanceout.instances[0].public_dns_name }}"
+    search_regex: OpenSSH
+    delay: 10

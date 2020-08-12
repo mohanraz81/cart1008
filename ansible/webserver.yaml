@@ -1,0 +1,16 @@
+---
+- hosts: webservers
+  tasks:
+  - name: Install apache
+    yum:
+      name: httpd
+      state: latest
+  - name: Copy the code
+    copy:
+      src: /home/ec2-user/environment/cart1008/code/index.html
+      dest: /var/www/html/index.html
+  - name: Start service httpd, if not started
+    service:
+      name: httpd
+      state: started
+      enabled: yes

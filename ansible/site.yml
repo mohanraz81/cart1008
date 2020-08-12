@@ -1,0 +1,17 @@
+---
+# This playbook deploys a simple standalone Tomcat 7 server.
+
+- hosts: localhost
+  tasks:
+    - include_role:
+        name: createawsvm
+- hosts: webservers
+  tasks:
+    - include_role:
+        name: tomcat
+- hosts: localhost
+  tasks:
+    - include_role:
+        name: createimage
+      vars:
+        webinstanceid: "{{ webinstanceout.instances[0].instance_id }}"
