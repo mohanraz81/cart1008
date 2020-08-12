@@ -51,7 +51,7 @@
  
 - name: copy war file
   copy:
-    src: /home/ec2-user/environment/cart1008/target/java-tomcat-maven-example.war
+    src: "{{ warfile }}"
     dest: /usr/share/tomcat/webapps/java-tomcat-maven-example.war
     owner: tomcat
     group: tomcat
