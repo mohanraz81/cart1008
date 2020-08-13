@@ -35,6 +35,7 @@
     image_id: ami-02354e95b39ca8dec
     tags:
       Name: webserver
+    state: running
   register: webinstanceout
 - debug:
     var: webinstanceout
