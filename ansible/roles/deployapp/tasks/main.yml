@@ -1,4 +1,7 @@
 ---
+- name: upload image vars
+  include_vars:
+    file: image.yaml
 - name: upload vars
   include_vars:
     file: myvars.yaml
