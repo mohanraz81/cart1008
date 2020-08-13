@@ -16,3 +16,7 @@
   register: imageout
 - debug:
     var: imageout
+- name: write image id
+  copy:
+    content: "imageid: {{ imageout.imageid }}"
+    dest: ansible/roles/deplyapp/vars/image.yaml
