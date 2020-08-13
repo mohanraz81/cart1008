@@ -1,13 +1,15 @@
 ---
 - name: Stop the VM
   ec2_instance:
+    region: "{{ awsregion }}"
     state: stopped
     instance_ids:
       - "{{ webinstanceid }}"
 - name: create a AMI
   ec2_ami:
+    region: "{{ awsregion }}"
     instance_id: "{{ webinstanceid }}"
     wait: yes
-    name: webapp-1.0
+    name: "webapp-{{ versionid }}"
     tags:
-      Name: webapp-1.0
+      Name: "webapp-{{ versionid }}"

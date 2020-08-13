@@ -4,15 +4,11 @@
     file: myvars.yaml
 - name: Create a AWS Keypair
   ec2_key:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     region: "{{ awsregion }}"
     name: "{{ keypairname }}"
     key_material: "{{ lookup('file', 'tomcat.pub') }}"
 - name: Create a Security group for EC2
   ec2_group:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     name: "{{ sgname }}"
     description: web server security Group
     vpc_id: "{{ vpcid }}"
@@ -28,8 +24,6 @@
         cidr_ip: 0.0.0.0/0
 - name: Create a ec2 instance
   ec2_instance:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     region: "{{ awsregion }}"
     name: "webserver"
     key_name: "{{ keypairname }}"
