@@ -7,8 +7,6 @@
     file: myvars.yaml
 - name: note that encrypted volumes are only supported in >= Ansible 2.4
   ec2_lc:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     region: "{{ awsregion }}"
     name: "webapp-{{ versionid }}"
     image_id: "{{ webappimageid }}"
@@ -18,8 +16,6 @@
     instance_type: t2.micro
 - name: Create a Security group for EC2
   ec2_group:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     region: "{{ awsregion }}"
     name: "{{ lbsgname }}"
     description: web server security Group
@@ -31,8 +27,6 @@
         to_port: 80
         cidr_ip: 0.0.0.0/0
 - ec2_elb_lb:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     region: "{{ awsregion }}"
     name: "webapplb"
     state: present
@@ -48,8 +42,6 @@
         proxy_protocol: True
 
 - ec2_asg:
-    aws_access_key: "{{ awsaccesskey }}"
-    aws_secret_key: "{{ awssecretkey }}"
     region: "{{ awsregion }}"
     name: webapp
     load_balancers:
