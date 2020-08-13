@@ -19,4 +19,4 @@
 - name: write image id
   copy:
     content: "webappimageid: {{ imageout.image_id }}"
-    dest: ansible/roles/deployapp/vars/image.yaml
+    dest: image.yaml
