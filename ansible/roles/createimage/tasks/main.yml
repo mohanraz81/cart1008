@@ -13,3 +13,6 @@
     name: "webapp-{{ versionid }}"
     tags:
       Name: "webapp-{{ versionid }}"
+  register: imageout
+- debug:
+    var: imageout
