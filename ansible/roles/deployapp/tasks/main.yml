@@ -20,7 +20,6 @@
     name: "{{ lbsgname }}"
     description: web server security Group
     vpc_id: "{{ vpcid }}"
-    region: "{{ awsregion }}"
     rules:
       - proto: tcp
         from_port: 80
