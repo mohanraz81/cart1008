@@ -18,6 +18,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: redhat
       MYSQL_DATABASE: HMS
+      MYSQL_USER: admin
       MYSQL_PASSWORD: redhat
     
 volumes:
