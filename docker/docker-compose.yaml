@@ -1,0 +1,24 @@
+---
+version: "3.7"
+services:
+  myapp-frontend:
+    build:
+      context: ./DockerSpringBoot
+    image: mohanraz81/hmsapp-frontend:1.0
+    depends_on:
+      - mysql
+    ports:
+      - "9025:8086"
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - type: volume
+        source: mysqlvol
+        target: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: redhat
+      MYSQL_DATABASE: HMS
+      MYSQL_PASSWORD: redhat
+    
+volumes:
+  mysqlvol:
