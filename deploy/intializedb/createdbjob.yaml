@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: intializedb
+  namespace: mycart
+spec:
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: mysql:5.7
+        command: 
+          - bash
+          - "-c"
+          - |
+            set -ex
+            mysql -h mysql-0.mysql <<EOF
+            CREATE DATABASE HMS;
+            CREATE USER 'admin'@'%' IDENTIFIED BY 'redhat';
+            GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+            FLUSH PRIVILEGES;
+            EOF
+      restartPolicy: Never
+  backoffLimit: 4

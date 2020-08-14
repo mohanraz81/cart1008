@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: hms-frontend
+  namespace: hms
+spec:
+  selector:
+    matchLabels:
+      app: hms
+      tier: frontend
+  replicas: 2
+  minReadySeconds: 5
+  progressDeadlineSeconds: 300
+  revisionHistoryLimit: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template: 
+    metadata:
+      labels:
+        app: hms
+        tier: frontend
+    spec:
+      containers:
+      - name: hmsfe
+        image: mohanraz81/hmapp-frontend:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8086
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "500Mi"
+          requests:
+            cpu: "0.4"
+            memory: "400Mi"
+
+
+
