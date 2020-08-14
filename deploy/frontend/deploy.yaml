@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: hmsfe
-        image: mohanraz81/hmapp-frontend:1.0
+        image: mohanraz81/hmsapp-frontend:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8086
