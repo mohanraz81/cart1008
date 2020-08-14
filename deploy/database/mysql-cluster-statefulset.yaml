@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  namespace: mycart
+  namespace: hms
   name: mysql
 spec:
   selector:
