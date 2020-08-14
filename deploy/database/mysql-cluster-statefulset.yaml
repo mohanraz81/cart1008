@@ -68,6 +68,12 @@ spec:
         env:
         - name: MYSQL_ALLOW_EMPTY_PASSWORD
           value: "1"
+        - name: MYSQL_DATABASE
+          value: HMS
+        - name: MYSQL_USER 
+          value: admin
+        - name: MYSQL_PASSWORD
+          value: redhat
         ports:
         - name: mysql
           containerPort: 3306
